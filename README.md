@@ -25,6 +25,7 @@ with your BITalino device MAC address.
 * Compile and install *BITalinoDroid* app onto your Android device:
 
 ```
+cd whatever_directory_you_cloned_this_repository
 gradle clean build installDebug
 ```
 
