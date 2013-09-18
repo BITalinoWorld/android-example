@@ -27,3 +27,4 @@ gradle*
 
 # Idea project files 
 *.iml
+.idea
