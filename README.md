@@ -25,7 +25,7 @@ with your BITalino device MAC address.
 * Compile and install *BITalinoDroid* app onto your Android device:
 
 ```
-gradlew clean build installDebug
+gradle clean build installDebug
 ```
 
 * Now, *be sure* to pair your Android device with BITalino device, before running _BITalinoDroid_ on your phone.
