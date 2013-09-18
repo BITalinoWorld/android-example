@@ -13,9 +13,9 @@ BITalino Android example application that uses my own BITalino Java SDK.
 ```
 git clone git@github.com:pires/bitalino-java-sdk.git
 cd bitalino-java-sdk
-git co -b 0.2 bitalino-java-sdk-0.2
+git checkout -b 0.2 bitalino-java-sdk-0.2
 mvn clean install
-git co master
+git checkout master
 ```
 
 ## Test with device ##
