@@ -25,6 +25,6 @@ android {
 }
 
 dependencies {
-	compile 'com.android.support:appcompat-v7:18.0.0'
-    compile 'com.bitalino:bitalino-api:0.2'
+    compile 'com.android.support:appcompat-v7:18.0.0'
+    compile 'com.bitalino:bitalino-api:0.4.1'
 }
