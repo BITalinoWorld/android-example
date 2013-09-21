@@ -7,16 +7,6 @@ BITalino Android example application that uses my own BITalino Java SDK.
 - JDK 6 or 7
 - Android Studio (tested on 0.2.9)
 - Gradle 1.7
-- My own BITalino Java SDK compiled and installed (see https://github.com/pires/bitalino-java-sdk)
-
-## Install my own BITalino SDK ##
-```
-git clone git@github.com:pires/bitalino-java-sdk.git
-cd bitalino-java-sdk
-git checkout -b 0.2 bitalino-java-sdk-0.2
-mvn clean install
-git checkout master
-```
 
 ## Test with device ##
 * Change _src/main/java/com/bitalino/bitalinodroid/MainActivity.java_ and replace current _remoteDevice_ assignment
