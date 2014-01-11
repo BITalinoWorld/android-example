@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
+        classpath 'com.android.tools.build:gradle:0.7.+'
     }
 }
 apply plugin: 'android'
@@ -26,5 +26,5 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:18.0.0'
-    compile 'com.bitalino:bitalino-api:0.4.1'
+    compile 'com.bitalino:bitalino-api:0.4.2'
 }
