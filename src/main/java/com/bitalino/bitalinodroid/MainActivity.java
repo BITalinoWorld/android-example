@@ -17,6 +17,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import retrofit.RestAdapter;
+
 public class MainActivity extends Activity {
 
   private static final String TAG = "MainActivity";
@@ -30,7 +32,7 @@ public class MainActivity extends Activity {
    * UUID."
    */
   private static final UUID MY_UUID = UUID
-          .fromString("00001101-0000-1000-8000-00805F9B34FB");
+      .fromString("00001101-0000-1000-8000-00805F9B34FB");
   private boolean testInitiated = false;
 
   @Override
@@ -101,6 +103,20 @@ public class MainActivity extends Activity {
         final int numberOfSamplesToRead = 10;
         publishProgress("Reading " + numberOfSamplesToRead + " samples..");
         BITalinoFrame[] frames = bitalino.read(numberOfSamplesToRead);
+
+        // prepare reading for upload
+        BITalinoReading reading = new BITalinoReading();
+        reading.setTimestamp(System.currentTimeMillis());
+        reading.setFrames(frames);
+        // instantiate reading service client
+        RestAdapter restAdapter = new RestAdapter.Builder()
+            .setEndpoint("http://localhost:8080")
+            .build();
+        ReadingService service = restAdapter.create(ReadingService.class);
+        // upload reading
+        service.uploadReading(reading, null);
+
+        // present data in screen
         for (BITalinoFrame frame : frames)
           publishProgress(frame.toString());
 
