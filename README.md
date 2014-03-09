@@ -4,9 +4,9 @@ bitalino-android-example
 BITalino Android example application that uses my own BITalino Java SDK.
 
 ## Prerequisites ##
-- JDK 6 or 7
-- Android Studio (tested on 0.4.2)
-- Gradle 1.9
+- JDK 7
+- Android Studio (tested on 0.5.1)
+- Gradle 1.11
 - Android SDK (build-tools 19.0.1 and SDK 19)
 
 ## Test with device ##
