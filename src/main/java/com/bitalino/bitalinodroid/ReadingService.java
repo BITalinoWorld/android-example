@@ -14,6 +14,7 @@
 package com.bitalino.bitalinodroid;
 
 import retrofit.Callback;
+import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.PUT;
 
@@ -23,6 +24,6 @@ import retrofit.http.PUT;
 public interface ReadingService {
 
   @PUT("/")
-  void uploadReading(@Body BITalinoReading reading, Callback<BITalinoReading> cb);
+  Response uploadReading(@Body BITalinoReading reading);
   
 }

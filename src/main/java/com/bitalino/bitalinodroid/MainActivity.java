@@ -18,6 +18,7 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 import retrofit.RestAdapter;
+import retrofit.client.Response;
 
 public class MainActivity extends Activity {
 
@@ -114,7 +115,8 @@ public class MainActivity extends Activity {
             .build();
         ReadingService service = restAdapter.create(ReadingService.class);
         // upload reading
-        service.uploadReading(reading, null);
+        Response response = service.uploadReading(reading);
+        assert response.getStatus() == 200;
 
         // present data in screen
         for (BITalinoFrame frame : frames)
