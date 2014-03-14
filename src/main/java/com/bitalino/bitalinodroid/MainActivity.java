@@ -111,7 +111,7 @@ public class MainActivity extends Activity {
         reading.setFrames(frames);
         // instantiate reading service client
         RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://localhost:8080")
+            .setEndpoint("http://server_ip:8080/bitalino")
             .build();
         ReadingService service = restAdapter.create(ReadingService.class);
         // upload reading
