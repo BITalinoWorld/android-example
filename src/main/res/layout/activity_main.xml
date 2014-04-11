@@ -13,6 +13,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:text="@string/waiting"
-        android:editable="false" />
+        android:editable="false"
+        android:singleLine="false"
+        android:enabled="false"
+        android:clickable="false"/>
 
 </RelativeLayout>

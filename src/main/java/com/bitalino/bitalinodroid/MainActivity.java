@@ -1,6 +1,5 @@
 package com.bitalino.bitalinodroid;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -10,8 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.TextView;
 
-import com.bitalino.BITalinoDevice;
-import com.bitalino.BITalinoFrame;
+import com.bitalino.comm.BITalinoDevice;
+import com.bitalino.comm.BITalinoFrame;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,10 +18,13 @@ import java.util.UUID;
 
 import retrofit.RestAdapter;
 import retrofit.client.Response;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends RoboActivity {
 
   private static final String TAG = "MainActivity";
+  private static final boolean UPLOAD = false;
   /*
    * http://developer.android.com/reference/android/bluetooth/BluetoothDevice.html
    * #createRfcommSocketToServiceRecord(java.util.UUID)
@@ -34,6 +36,8 @@ public class MainActivity extends Activity {
    */
   private static final UUID MY_UUID = UUID
       .fromString("00001101-0000-1000-8000-00805F9B34FB");
+  @InjectView(R.id.log)
+  private TextView tvLog;
   private boolean testInitiated = false;
 
   @Override
@@ -41,6 +45,7 @@ public class MainActivity extends Activity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // execute
     if (!testInitiated)
       new TestAsyncTask().execute();
   }
@@ -58,6 +63,7 @@ public class MainActivity extends Activity {
     private BluetoothSocket sock = null;
     private InputStream is = null;
     private OutputStream os = null;
+    private BITalinoDevice bitalino;
 
     @Override
     protected Void doInBackground(Void... paramses) {
@@ -89,7 +95,7 @@ public class MainActivity extends Activity {
         sock.connect();
         testInitiated = true;
 
-        BITalinoDevice bitalino = new BITalinoDevice(10, new int[]{0});
+        bitalino = new BITalinoDevice(1000, new int[]{0, 1, 2, 3, 4, 5});
         publishProgress("Connecting to BITalino [" + remoteDevice + "]..");
         bitalino.open(sock.getInputStream(), sock.getOutputStream());
         publishProgress("Connected.");
@@ -100,38 +106,38 @@ public class MainActivity extends Activity {
         // start acquisition on predefined analog channels
         bitalino.start();
 
-        // read n samples
-        final int numberOfSamplesToRead = 10;
-        publishProgress("Reading " + numberOfSamplesToRead + " samples..");
-        BITalinoFrame[] frames = bitalino.read(numberOfSamplesToRead);
+        // read until task is stopped
+        int counter = 0;
+        while (counter < 100) {
+          final int numberOfSamplesToRead = 1000;
+          publishProgress("Reading " + numberOfSamplesToRead + " samples..");
+          BITalinoFrame[] frames = bitalino.read(numberOfSamplesToRead);
 
-        // prepare reading for upload
-        BITalinoReading reading = new BITalinoReading();
-        reading.setTimestamp(System.currentTimeMillis());
-        reading.setFrames(frames);
-        // instantiate reading service client
-        RestAdapter restAdapter = new RestAdapter.Builder()
-            .setEndpoint("http://server_ip:8080/bitalino")
-            .build();
-        ReadingService service = restAdapter.create(ReadingService.class);
-        // upload reading
-        Response response = service.uploadReading(reading);
-        assert response.getStatus() == 200;
+          if (UPLOAD) {
+            // prepare reading for upload
+            BITalinoReading reading = new BITalinoReading();
+            reading.setTimestamp(System.currentTimeMillis());
+            reading.setFrames(frames);
+            // instantiate reading service client
+            RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("http://server_ip:8080/bitalino")
+                .build();
+            ReadingService service = restAdapter.create(ReadingService.class);
+            // upload reading
+            Response response = service.uploadReading(reading);
+            assert response.getStatus() == 200;
+          }
 
-        // present data in screen
-        for (BITalinoFrame frame : frames)
-          publishProgress(frame.toString());
+          // present data in screen
+          for (BITalinoFrame frame : frames)
+            publishProgress(frame.toString());
+
+          counter++;
+        }
 
         // trigger digital outputs
         // int[] digital = { 1, 1, 1, 1 };
         // device.trigger(digital);
-
-        // stop acquisition and close bluetooth connection
-        bitalino.stop();
-        publishProgress("BITalino is stopped");
-
-        sock.close();
-        publishProgress("And we're done! :-)");
       } catch (Exception e) {
         Log.e(TAG, "There was an error.", e);
       }
@@ -142,6 +148,20 @@ public class MainActivity extends Activity {
     @Override
     protected void onProgressUpdate(String... values) {
       tvLog.append("\n".concat(values[0]));
+    }
+
+    @Override
+    protected void onCancelled() {
+      // stop acquisition and close bluetooth connection
+      try {
+        bitalino.stop();
+        publishProgress("BITalino is stopped");
+
+        sock.close();
+        publishProgress("And we're done! :-)");
+      } catch (Exception e) {
+        Log.e(TAG, "There was an error.", e);
+      }
     }
 
   }
