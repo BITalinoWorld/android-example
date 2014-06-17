@@ -5,9 +5,9 @@ BITalino Android example application that uses my own BITalino Java SDK.
 
 ## Prerequisites ##
 - JDK 7
-- Android Studio (tested on 0.5.1)
-- Gradle 1.11
-- Android SDK (build-tools 19.0.1 and SDK 19)
+- Android Studio (tested on 0.6.1)
+- Gradle 1.12
+- Android SDK (build-tools 19.1 and SDK 19)
 
 ## Test with device ##
 * Change _src/main/java/com/bitalino/bitalinodroid/MainActivity.java_ and replace current _remoteDevice_ assignment
@@ -25,5 +25,5 @@ gradle clean build installDebug
 
 ## Tested on ##
 Galaxy Nexus (Android 4.3)
-LG Nexus 5 (Android 4.4.2)
+LG Nexus 5 (Android 4.4.3)
 Asus Nexus 7 (Android 4.4.2)
